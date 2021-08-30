@@ -1,0 +1,81 @@
+version : "3"
+
+services :
+    nginx :
+        container_name : nginx
+        build : ./requirements/nginx
+        volumes :
+            - wp_vol:/var/www/html/wordpress
+        networks :
+            - my_net
+        depends_on :
+            - wordpress
+            - ftp-srv
+        ports : 
+            - "443:443"
+
+    wordpress:
+        volumes :
+            - wp_vol:/var/www/html/wordpress
+        container_name: wordpress
+        build : ./requirements/wordpress
+        env_file:
+            - .env
+        depends_on:
+            -   mariadb
+            -   redis
+        networks : 
+            - my_net
+
+
+    mariadb:
+        volumes:
+            - db_vol:/var/lib/mysql
+        container_name: mariadb
+        build : ./requirements/mariadb
+        environment:
+            DB_NAME: ${DB_NAME}
+            DB_HOST: ${DB_HOST}
+            DB_PASSWORD: ${DB_PASSWORD}
+            DB_USER: ${DB_USER}
+        networks:
+            - my_net
+    
+    ftp-srv :
+        container_name : ftp-srv
+        build : ./bonus/bonus/ftp
+        ports:
+            - "20:20"
+            - "21:21"
+        volumes: 
+            - wp_vol:/shared_fold
+        networks:
+            - my_net
+    redis:
+        container_name: redis
+        build : ./bonus/redis
+        networks:
+            - my_net
+       
+networks :
+        - my_net
+
+volumes :
+    wp_vol:
+        name : wp_vol   
+        driver: local
+        driver_opts :
+            type: none
+            o: bind
+            device : /home/techies/volume/
+    db_vol:
+        name: db_vol
+        driver: local
+        driver_opts :
+            type: none
+            o: bind
+            device : /home/techies/db_vol/
+
+networks :
+    my_net :
+        driver : bridge
