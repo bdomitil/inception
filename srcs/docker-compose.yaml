@@ -83,21 +83,21 @@ volumes :
         driver_opts :
             type: none
             o: bind
-            device : /home/techies/volume/
+            device : /home/ubuntu/volume/
     adminer_vol:
         name : adminer_vol  
         driver: local
         driver_opts :
             type: none
             o: bind
-            device : /home/techies/adminer_vol/
+            device : /home/ubuntu/adminer_vol/
     db_vol:
         name: db_vol
         driver: local
         driver_opts :
             type: none
             o: bind
-            device : /home/techies/db_vol/
+            device : /home/ubuntu/db_vol/
 
 networks :
     my_net :
