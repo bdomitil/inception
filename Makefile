@@ -7,7 +7,9 @@ down:
 	 docker-compose -f srcs/docker-compose.yaml down
 
 build :
-	mkdir -p /home/ubuntu{volume, db_vol, adminer_vol}
+	mkdir -p /home/ubuntu/volume
+	mkdir -p /home/ubuntu/db_vol
+	mkdir -p /home/ubuntu/adminer_vol
 	docker-compose -f srcs/docker-compose.yaml build
 
 clean-vol:
